@@ -112,6 +112,7 @@ function validateTypeCourseInfo (courseInfo) {
         }
     } catch (err) {
         typeValidationErrorLog.push(err)
+        return typeValidationErrorLog
     }
 }
 
@@ -119,63 +120,25 @@ function validateTypeCourseInfo (courseInfo) {
 function validateTypeAssignmentGroup (assignmentGroup) {
     let typeCheck = false
     const agExpectedKeys = ['id', 'name', 'course_id', 'group_weight', 'assignments']
-    const getObjectKeys = Object.keys(assignmentGroup)
     let correctKeysCounter = 0
-
+    
     try {
+        const getObjectKeys = Object.keys(assignmentGroup)
 
-    } catch (err) {
-
-    }
-}
-
-/* console.log(validateTypeCourseInfo(CourseInfo))
-console.log(typeValidationErrorLog) */
-
-
-/* function typeValidationAssignmentGroup (assignmentGroup) {
-    let typeCheck = false
-    const agExpectedKeys = ['id', 'name', 'course_id', 'group_weight', 'assignments']
-    const agFoundKeys = []
-
-    try {
-        for (const key in assignmentGroup) {
-            agFoundKeys.push(assignmentGroup.key)
+        for (let i = 0; i < getObjectKeys.length; i++) {
+            if (agExpectedKeys[i] == getObjectKeys[i]) {
+                correctKeysCounter += 1
+            }
         }
 
+        if (correctKeysCounter === 5) {
+            typeCheck = true
+            return typeCheck
+        } else {
+            throw new ReferenceError("Invalid input: 'Assignment Group'")
+        }
     } catch (err) {
         typeValidationErrorLog.push(err)
+        return typeValidationErrorLog
     }
-} */
-
-// console.log(typeValidationAssignmentGroup(AssignmentGroup))
-
-// const agExpectedKeys = ['id', 'name', 'course_id', 'group_weight', 'assignments']
-/* const agFoundKeys = []
-for (const key in AssignmentGroup) {
-    agFoundKeys.push(AssignmentGroup.key)
-} */
-
-/* const agKeys = Object.keys(AssignmentGroup)
-
-console.log(agExpectedKeys)
-console.log(agKeys)
-
-console.log((agExpectedKeys === agKeys)) */
-
-console.log(validateTypeAssignmentGroup(AssignmentGroup))
-
-/* function validateTypeAssignmentGroup (assignmentGroup) {
-    let typeCheck = false
-    const agExpectedKeys = ['id', 'name', 'course_id', 'group_weight', 'assignments']
-    const getObjectKeys = Object.keys(assignmentGroup)
-    let correctKeysCounter = 0
-
-    for (let i = 0; i < getObjectKeys.length; i++) {
-        if (agExpectedKeys[i] == getObjectKeys[i]) {
-            correctKeysCounter += 1
-        }
-    }
-
-    return correctKeysCounter
-} */
+}
