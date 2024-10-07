@@ -95,8 +95,11 @@ const LearnerSubmissions = [
 ]
 
 //                                              MY CODE HERE
+// error logs & other global variables
 const typeValidationErrorLog = []
 
+//              Type Validation Functions Here
+// validate Course Info
 function validateTypeCourseInfo (courseInfo) {
     let typeCheck = false
 
@@ -112,5 +115,67 @@ function validateTypeCourseInfo (courseInfo) {
     }
 }
 
-console.log(validateTypeCourseInfo(CourseInfo))
-console.log(typeValidationErrorLog)
+// validate Assignment Group
+function validateTypeAssignmentGroup (assignmentGroup) {
+    let typeCheck = false
+    const agExpectedKeys = ['id', 'name', 'course_id', 'group_weight', 'assignments']
+    const getObjectKeys = Object.keys(assignmentGroup)
+    let correctKeysCounter = 0
+
+    try {
+
+    } catch (err) {
+
+    }
+}
+
+/* console.log(validateTypeCourseInfo(CourseInfo))
+console.log(typeValidationErrorLog) */
+
+
+/* function typeValidationAssignmentGroup (assignmentGroup) {
+    let typeCheck = false
+    const agExpectedKeys = ['id', 'name', 'course_id', 'group_weight', 'assignments']
+    const agFoundKeys = []
+
+    try {
+        for (const key in assignmentGroup) {
+            agFoundKeys.push(assignmentGroup.key)
+        }
+
+    } catch (err) {
+        typeValidationErrorLog.push(err)
+    }
+} */
+
+// console.log(typeValidationAssignmentGroup(AssignmentGroup))
+
+// const agExpectedKeys = ['id', 'name', 'course_id', 'group_weight', 'assignments']
+/* const agFoundKeys = []
+for (const key in AssignmentGroup) {
+    agFoundKeys.push(AssignmentGroup.key)
+} */
+
+/* const agKeys = Object.keys(AssignmentGroup)
+
+console.log(agExpectedKeys)
+console.log(agKeys)
+
+console.log((agExpectedKeys === agKeys)) */
+
+console.log(validateTypeAssignmentGroup(AssignmentGroup))
+
+/* function validateTypeAssignmentGroup (assignmentGroup) {
+    let typeCheck = false
+    const agExpectedKeys = ['id', 'name', 'course_id', 'group_weight', 'assignments']
+    const getObjectKeys = Object.keys(assignmentGroup)
+    let correctKeysCounter = 0
+
+    for (let i = 0; i < getObjectKeys.length; i++) {
+        if (agExpectedKeys[i] == getObjectKeys[i]) {
+            correctKeysCounter += 1
+        }
+    }
+
+    return correctKeysCounter
+} */
