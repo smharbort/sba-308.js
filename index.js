@@ -100,7 +100,7 @@ const typeValidationErrorLog = []
 
 //              Type Validation Functions Here
 // validate Course Info
-function validateTypeCourseInfo (courseInfo) {
+/* function validateTypeCourseInfo (courseInfo) {
     let typeCheck = false
 
     try {
@@ -114,13 +114,13 @@ function validateTypeCourseInfo (courseInfo) {
         typeValidationErrorLog.push(err)
         return typeValidationErrorLog
     }
-}
+} */
 
 // validate Assignment Group
-function validateTypeAssignmentGroup (assignmentGroup) {
-    let typeCheck = false
+/* function validateTypeAssignmentGroup (assignmentGroup) {
     const agExpectedKeys = ['id', 'name', 'course_id', 'group_weight', 'assignments']
     let correctKeysCounter = 0
+    let typeCheck = false
     
     try {
         const getObjectKeys = Object.keys(assignmentGroup)
@@ -141,4 +141,39 @@ function validateTypeAssignmentGroup (assignmentGroup) {
         typeValidationErrorLog.push(err)
         return typeValidationErrorLog
     }
+} */
+
+// validate Assignment Info
+function validateTypeAssignmentsInfo (assignmentGroup) {
+    const aiExpectedKeys = ["id", "name", "due_at", "points_possible"]
+    let correctAssignmentsCounter = 0
+    let typeCheck = false
+    
+    try {
+        const getAssignments = assignmentGroup["assignments"]
+        for (let i = 0; i < getAssignments.length; i++) {
+            const getAssignmentObjKeys = Object.keys(getAssignments[i])
+            let correctKeysCounter = 0
+            
+            for (let j = 0; j < getAssignmentObjKeys.length; j++) {
+                if ((getAssignmentObjKeys[j]) == (aiExpectedKeys[j])) {
+                    correctKeysCounter += 1
+                }
+    
+                if (correctKeysCounter === 4) {
+                    correctAssignmentsCounter += 1
+                }
+            }
+        }
+        if (correctAssignmentsCounter === getAssignments.length) {
+            typeCheck = true
+            return typeCheck
+        } else {
+            throw new ReferenceError("Invalid input: 'Assignments Info'")
+        }
+    } catch (err) {
+        typeValidationErrorLog.push(err)
+        return typeValidationErrorLog
+    }
 }
+console.log(validateTypeAssignmentsInfo(AssignmentGroup))
