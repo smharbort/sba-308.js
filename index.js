@@ -94,34 +94,15 @@ const LearnerSubmissions = [
     }
 ]
 
-/* function validateTypeCourseInfo (courseInfo) {
-
-    let keyCounter = 0
-    for (const key in courseInfo) {
-        keyCounter += 1
-    }
-    if (keyCounter !== 2) {
-
-    }
-    return keyCounter
-} */
+//                                              MY CODE HERE
 const typeValidationErrorLog = []
 
 function validateTypeCourseInfo (courseInfo) {
-    let keyCounter = 0
     let typeCheck = false
 
-    
     try {
-        for (const key in courseInfo) {
-            keyCounter += 1
-        }
-
-        if (keyCounter == 2) {
+        if ((courseInfo.id) && (courseInfo.name)) {
             typeCheck = true
-        }
-
-        if (typeCheck) {
             return typeCheck
         } else {
             throw new ReferenceError("Invalid input: 'Course Info'")
@@ -129,7 +110,6 @@ function validateTypeCourseInfo (courseInfo) {
     } catch (err) {
         typeValidationErrorLog.push(err)
     }
-
 }
 
 console.log(validateTypeCourseInfo(CourseInfo))
