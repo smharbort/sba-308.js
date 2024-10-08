@@ -76,152 +76,43 @@ const LearnerSubmissions = [                // LearnerSubmissions -> array > obj
 //                                                      START CODE HERE
 //              Type & Data Validation Functions
 // validate courseInfo -> both type of input & course id check out -> return 'validated' object
-function validateCourseInfo (courseInfo) {
-    const courseInfoErrorLog = []
-    let validated = {
-        type_check: false,
-        course_id: null
+function validateInputs (ci, ag, ls) {
+    const validationErrorLog = []
+    const validatedObj = {
+        check_ci: false,
+        check_ag: false,
+        check_ls: false
     }
 
     try {
-        if (typeof courseInfo == "object") {
-            validated.type_check = true
+        if (typeof ci === "object") {
+
+            validatedObj.check_ci = true
+
+            if (ci.id) {
+                const ciCourseId = ci.id
+            } else {
+                throw new ReferenceError("Missing 'course_id'")
+            }
+
         } else {
             throw new ReferenceError("Invalid input: 'Course Info'")
         }
     } catch (err) {
-        courseInfoErrorLog.push(err)
+        validationErrorLog.push(err)
+    }
+
+
+    try {
+
+    } catch (err) {
+
     }
 
     try {
-        if (typeof courseInfo.id == "number") {
-            validated.course_id = courseInfo.id
-        } else {
-            throw new ReferenceError("Missing input: 'id'")
-        }
-    } catch (err) {
-        courseInfoErrorLog.push(err)
-    }
 
-    // console.log(courseInfoErrorLog)
-    return validated
+    } catch (err) {
+
+    }
 }
-// console.log(validateCourseInfo(CourseInfo))
 
-
-// validate assignmentGroup -> 
-function validateAssignmentGroup (assignmentGroup) {
-    const assignmentGroupErrorLog = []
-
-    let validated = {
-        type_check: false,
-        course_id: null}
-
-    try {
-        if (typeof assignmentGroup == "object") {
-            validated.type_check = true
-        } else {
-            throw new ReferenceError("Invalid input: 'Assignment Group'")
-        }
-    } catch (err) {
-        assignmentGroupErrorLog.push(err)
-    }
-
-    try {
-        if (typeof assignmentGroup.course_id == "number") {
-            validated.course_id = assignmentGroup.course_id
-        } else {
-            throw new ReferenceError("Missing input: 'course_id'")
-        }
-    } catch (err) {
-        assignmentGroupErrorLog.push(err)
-    }
-
-    // console.log(assignmentGroupErrorLog)
-    return validated
-}
-// console.log(validateAssignmentGroup(AssignmentGroup))
-
-
-function validateAssignmentsInfo (assignmentGroup) {
-    const assignmentsInfoErrorLog = []
-    const validated = {
-        typeCheck: true,
-        assign_id_arr: [],
-        assign_name_arr: [],
-        due_at_arr: [],
-        points_possible_arr: []
-    }
-
-    try {
-        assignmentGroup.assignments.forEach(objEntry => {
-            validated.assign_id_arr.push(objEntry.id)
-            validated.assign_name_arr.push(objEntry.name)
-            validated.due_at_arr.push(objEntry.due_at)
-            validated.points_possible_arr.push(objEntry.points_possible)
-        })
-    } catch (err) {
-        assignmentsInfoErrorLog.push(err)
-    }
-
-    // console.log(assignmentsInfoErrorLog)
-    return validated
-}
-// console.log(validateAssignmentsInfo(AssignmentGroup))
-
-function validateLearnerSubmissions (learnerSubmissions) {
-    const learnerSubmissionsErrorLog = []
-    const validated = {
-        type_check: false,
-        learner_id_arr: [],
-        assignment_id_arr: [],
-        submission_date_arr: [],
-        score_arr: []
-    }
-
-    try {
-        if (typeof learnerSubmissions == "object") {
-            validated.type_check = true
-        } else {
-            throw new ReferenceError("Invalid input: 'Learner Submissions'")
-        }
-    } catch (err) {
-        learnerSubmissionsErrorLog.push(err)
-    }
-
-    try {
-        learnerSubmissions.forEach(objEntry => {
-            validated.learner_id_arr.push(objEntry.learner_id)
-            validated.assignment_id_arr.push(objEntry.assignment_id)
-            validated.submission_date_arr.push(objEntry.submission.submitted_at)
-            validated.score_arr.push(objEntry.submission.score)
-        })
-    } catch (err) {
-        learnerSubmissionsErrorLog.push(err)
-    }
-
-    // console.log(learnerSubmissionsErrorLog)
-    return validated
-}
-// console.log(validateLearnerSubmissions(LearnerSubmissions))
-
-
-function bigPenultimateFormatting (courseInfo, assignmentGroup, learnerSubmissions) {
-    const checkCourseInfo = validateCourseInfo(CourseInfo)
-    const checkAssignmentGroup = validateAssignmentGroup(AssignmentGroup)
-    const checkAssignmentsInfo = validateAssignmentsInfo(AssignmentGroup)
-    const checkLearnerSubmissions = validateLearnerSubmissions(LearnerSubmissions)
-
-    const splitSubmissionDateArr = []
-
-    for (const index of checkLearnerSubmissions.submission_date_arr) {
-        splitSubmissionDateArr.push(index.split('-'))
-    }
-
-    const splitDueAtDateArr = []
-
-    for (const index of checkAssignmentsInfo.due_at_arr) {
-        splitDueAtDateArr.push(index.split('-'))
-    }
-
-}
