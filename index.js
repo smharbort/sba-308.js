@@ -94,13 +94,13 @@ const LearnerSubmissions = [
     }
 ]
 
-//                                              MY CODE HERE
+//                                                              MY CODE HERE
 // error logs & other global variables
 const typeValidationErrorLog = []
 
-//              Type Validation Functions Here
-// validate Course Info
-/* function validateTypeCourseInfo (courseInfo) {
+//                                              Type Validation Functions Here
+//              validate Course Info
+function validateTypeCourseInfo (courseInfo) {
     let typeCheck = false
 
     try {
@@ -112,12 +112,13 @@ const typeValidationErrorLog = []
         }
     } catch (err) {
         typeValidationErrorLog.push(err)
-        return typeValidationErrorLog
+        return typeCheck
     }
-} */
+}
+// console.log(validateTypeCourseInfo(CourseInfo))
 
-// validate Assignment Group
-/* function validateTypeAssignmentGroup (assignmentGroup) {
+//              validate Assignment Group
+function validateTypeAssignmentGroup (assignmentGroup) {
     const agExpectedKeys = ['id', 'name', 'course_id', 'group_weight', 'assignments']
     let correctKeysCounter = 0
     let typeCheck = false
@@ -139,11 +140,12 @@ const typeValidationErrorLog = []
         }
     } catch (err) {
         typeValidationErrorLog.push(err)
-        return typeValidationErrorLog
+        return typeCheck
     }
-} */
+}
+// console.log(validateTypeAssignmentGroup(AssignmentGroup))
 
-// validate Assignment Info
+//              validate Assignment Info
 function validateTypeAssignmentsInfo (assignmentGroup) {
     const aiExpectedKeys = ["id", "name", "due_at", "points_possible"]
     let correctAssignmentsCounter = 0
@@ -173,7 +175,27 @@ function validateTypeAssignmentsInfo (assignmentGroup) {
         }
     } catch (err) {
         typeValidationErrorLog.push(err)
-        return typeValidationErrorLog
+        return typeCheck
     }
 }
-console.log(validateTypeAssignmentsInfo(AssignmentGroup))
+// console.log(validateTypeAssignmentsInfo(AssignmentGroup))
+
+
+//              validate learnerSubmission
+function validateTypeLearnerSubmission (learnerSubmission) {
+
+}
+
+//              FINAL FUNCTION
+function getLearnerData (courseInfo, assignmentGroup, learnerSubmission) {
+    const tryCourseInfo = validateTypeCourseInfo(courseInfo)
+    const tryAssignmentGroup = validateTypeAssignmentGroup(assignmentGroup)
+    const tryAssignmentsInfo = validateTypeAssignmentsInfo(assignmentGroup)
+    const tryLearnerSubmissions = validateTypeLearnerSubmission(learnerSubmission)
+
+    let everythingChecksOut = false
+
+    if (tryCourseInfo && tryAssignmentGroup && tryAssignmentsInfo && tryLearnerSubmissions) {
+        everythingChecksOut = true
+    }
+}
