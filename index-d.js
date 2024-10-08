@@ -93,32 +93,6 @@ const LearnerSubmissions = [                // LearnerSubmissions -> array > obj
 
     } */
 
-/* function structureLSData (ls) {
-    const lsObjArr = []
-    for (const objEntry of ls) {
-        
-        const newObjEntry = {
-            learner_id: 0,
-            subm_details: {
-                asgmt_ids: [],
-                subm_ats: [],
-                scores: []
-            }
-        }
-
-        if (newObjEntry.learner_id === 0) {
-            newObjEntry.learner_id = objEntry.learner_id
-        }
-
-        if (newObjEntry.learner_id == objEntry.learner_id) {
-            newObjEntry.subm_details.asgmt_ids.push(objEntry.assignment_id)
-            newObjEntry.subm_details.subm_ats.push(objEntry.submission.submitted_at)
-            newObjEntry.subm_details.scores.push(objEntry.submission.score)
-        }
-    }
-}
-console.log(structureLSData(LearnerSubmissions)) */
-
 
 function structureLSData (ls) {
     const lsObjArr = []
@@ -127,7 +101,6 @@ function structureLSData (ls) {
     for (const objEntry of ls) {
         
         const checkId = learner_ids.indexOf(objEntry.learner_id)
-        // console.log(`checking indexOf objEntry.learner_id: ${checkId}`)
 
         const newLSObjEntry = {
             learner_id: 0,
@@ -141,7 +114,6 @@ function structureLSData (ls) {
         if (checkId === -1) {
 
             learner_ids.push(objEntry.learner_id)
-            // console.log(learner_ids)
 
             newLSObjEntry.learner_id = objEntry.learner_id
 
@@ -160,20 +132,34 @@ function structureLSData (ls) {
 }
 // console.log(structureLSData(LearnerSubmissions))
 
-function structureAGData (ls, ag) {
+function structureAGData (ag) {
 
-    const getLSData = structureLSData(LearnerSubmissions)
-
-    // console.log(getLSData)
-    /* console.log(getLSData[0].subm_details.asgmt_ids)
-    console.log(getLSData[1].subm_details.asgmt_ids)
-
-    console.log(getLSData[0].subm_details.subm_ats)
-    console.log(getLSData[1].subm_details.subm_ats)
+    const agObjArrays = {
+        asgmt_ids: [],
+        due_ats: [],
+        points_possible_arr: []
+    }
     
-    console.log(getLSData[0].subm_details.scores)
-    console.log(getLSData[1].subm_details.scores) */
+    for (const objEntry of ag.assignments) {
+        agObjArrays.asgmt_ids.push(objEntry.id)
+        agObjArrays.due_ats.push(objEntry.due_at)
+        agObjArrays.points_possible_arr.push(objEntry.points_possible)
+    }
 
-    console.log(getLSData[0])
+    return agObjArrays
 }
-structureAGData(LearnerSubmissions)
+// console.log(structureAGData(AssignmentGroup))
+
+function getLearnerData (ag, ls) {
+
+    const getAGData = structureAGData(ag)
+    const getLSData = structureLSData(ls)
+
+    const result = []
+
+    console.log(getAGData)
+    // console.log(getLSData)
+
+    return result
+}
+getLearnerData(AssignmentGroup, LearnerSubmissions)
