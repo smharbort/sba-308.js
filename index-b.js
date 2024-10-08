@@ -6,7 +6,7 @@ const CourseInfo = {                        // CourseInfo -> object
 const AssignmentGroup = {                   // AssignmentGroup -> object > array > objects (assignments info)
     id: 12345,
     name: "Fundamentals of JavaScript",
-    course_id: 453,
+    course_id: 451,
     group_weight: 25,
     assignments: [
       {
@@ -79,13 +79,13 @@ const LearnerSubmissions = [                // LearnerSubmissions -> array > obj
 function validateCourseInfo (courseInfo) {
     const courseInfoErrorLog = []
     let validated = {
-        typeCheck: false,
+        type_check: false,
         course_id: null
     }
 
     try {
         if (typeof courseInfo == "object") {
-            validated.typeCheck = true
+            validated.type_check = true
         } else {
             throw new ReferenceError("Invalid input: 'Course Info'")
         }
@@ -103,20 +103,23 @@ function validateCourseInfo (courseInfo) {
         courseInfoErrorLog.push(err)
     }
 
-   return validated
+    // console.log(courseInfoErrorLog)
+    return validated
 }
 // console.log(validateCourseInfo(CourseInfo))
 
+
+// validate assignmentGroup -> 
 function validateAssignmentGroup (assignmentGroup) {
     const assignmentGroupErrorLog = []
 
     let validated = {
-        typeCheck: false,
+        type_check: false,
         course_id: null}
 
     try {
         if (typeof assignmentGroup == "object") {
-            validated.typeCheck = true
+            validated.type_check = true
         } else {
             throw new ReferenceError("Invalid input: 'Assignment Group'")
         }
@@ -134,12 +137,25 @@ function validateAssignmentGroup (assignmentGroup) {
         assignmentGroupErrorLog.push(err)
     }
 
+    // console.log(assignmentGroupErrorLog)
     return validated
 }
 // console.log(validateAssignmentGroup(AssignmentGroup))
 
 
+/* function validateAssignmentsInfo (assignmentGroup) {
+    const assignmentsInfoErrorLog = []
+    const validated = {
+        typeCheck: false,
+        assignments: []
+    }
 
+    try {
+
+    } catch (err) {
+
+    }
+} */
 
 
 
