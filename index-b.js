@@ -6,7 +6,7 @@ const CourseInfo = {                        // CourseInfo -> object
 const AssignmentGroup = {                   // AssignmentGroup -> object > array > objects (assignments info)
     id: 12345,
     name: "Fundamentals of JavaScript",
-    course_id: 451,
+    course_id: 453,
     group_weight: 25,
     assignments: [
       {
@@ -74,12 +74,13 @@ const LearnerSubmissions = [                // LearnerSubmissions -> array > obj
 ]
 
 //                                                      START CODE HERE
-//                              Type & Data Validation Functions
+//              Type & Data Validation Functions
+// validate courseInfo -> both type of input & course id check out -> return 'validated' object
 function validateCourseInfo (courseInfo) {
     const courseInfoErrorLog = []
     let validated = {
         typeCheck: false,
-        courseId: null
+        course_id: null
     }
 
     try {
@@ -94,7 +95,7 @@ function validateCourseInfo (courseInfo) {
 
     try {
         if (typeof courseInfo.id == "number") {
-            validated.courseId = courseInfo.id
+            validated.course_id = courseInfo.id
         } else {
             throw new ReferenceError("Missing input: 'id'")
         }
@@ -105,6 +106,77 @@ function validateCourseInfo (courseInfo) {
    return validated
 }
 // console.log(validateCourseInfo(CourseInfo))
+
+function validateAssignmentGroup (assignmentGroup) {
+    const assignmentGroupErrorLog = []
+
+    let validated = {
+        typeCheck: false,
+        course_id: null}
+
+    try {
+        if (typeof assignmentGroup == "object") {
+            validated.typeCheck = true
+        } else {
+            throw new ReferenceError("Invalid input: 'Assignment Group'")
+        }
+    } catch (err) {
+        assignmentGroupErrorLog.push(err)
+    }
+
+    try {
+        if (typeof assignmentGroup.course_id == "number") {
+            validated.course_id = assignmentGroup.course_id
+        } else {
+            throw new ReferenceError("Missing input: 'course_id'")
+        }
+    } catch (err) {
+        assignmentGroupErrorLog.push(err)
+    }
+
+    return validated
+}
+// console.log(validateAssignmentGroup(AssignmentGroup))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //                              Putting the thing together functions
