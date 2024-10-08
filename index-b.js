@@ -35,7 +35,7 @@ const LearnerSubmissions = [                // LearnerSubmissions -> array > obj
       learner_id: 125,
       assignment_id: 1,
       submission: {
-        submitted_at: "2023-01-25",
+        submitted_at: "2023-01-25",         // convert date to number or something
         score: 47
       }
     },
@@ -151,15 +151,52 @@ function validateAssignmentGroup (assignmentGroup) {
     }
 
     try {
-
+        
     } catch (err) {
 
     }
 } */
 
+function validateLearnerSubmissions (learnerSubmissions) {
+    const learnerSubmissionsErrorLog = []
+    const validated = {
+        type_check: false,
+        learner_id_arr: [],
+        assignment_id_arr: [],
+        submission_date_arr: [],
+        score_arr: []
+    }
+
+    try {
+        if (typeof learnerSubmissions == "object") {
+            validated.type_check = true
+        } else {
+            throw new ReferenceError("Invalid input: 'Learner Submissions'")
+        }
+    } catch (err) {
+        learnerSubmissionsErrorLog.push(err)
+    }
+
+    try {
+        learnerSubmissions.forEach(objEntry => {
+            validated.learner_id_arr.push(objEntry.learner_id)
+            validated.assignment_id_arr.push(objEntry.assignment_id)
+            validated.submission_date_arr.push(objEntry.submission.submitted_at)
+            validated.score_arr.push(objEntry.submission.score)
+        })
+    } catch (err) {
+        learnerSubmissionsErrorLog.push(err)
+    }
+
+    // console.log(learnerSubmissionsErrorLog)
+    return validated
+}
+// console.log(validateLearnerSubmissions(LearnerSubmissions))
 
 
-
+function penultimate (courseInfo, assignmentGroup, learnerSubmissions) {
+    
+}
 
 
 
