@@ -143,19 +143,31 @@ function validateAssignmentGroup (assignmentGroup) {
 // console.log(validateAssignmentGroup(AssignmentGroup))
 
 
-/* function validateAssignmentsInfo (assignmentGroup) {
+function validateAssignmentsInfo (assignmentGroup) {
     const assignmentsInfoErrorLog = []
     const validated = {
-        typeCheck: false,
-        assignments: []
+        typeCheck: true,
+        assign_id_arr: [],
+        assign_name_arr: [],
+        due_at_arr: [],
+        points_possible_arr: []
     }
 
     try {
-        
+        assignmentGroup.assignments.forEach(objEntry => {
+            validated.assign_id_arr.push(objEntry.id)
+            validated.assign_name_arr.push(objEntry.name)
+            validated.due_at_arr.push(objEntry.due_at)
+            validated.points_possible_arr.push(objEntry.points_possible)
+        })
     } catch (err) {
-
+        assignmentsInfoErrorLog.push(err)
     }
-} */
+
+    // console.log(assignmentsInfoErrorLog)
+    return validated
+}
+// console.log(validateAssignmentsInfo(AssignmentGroup))
 
 function validateLearnerSubmissions (learnerSubmissions) {
     const learnerSubmissionsErrorLog = []
@@ -194,11 +206,43 @@ function validateLearnerSubmissions (learnerSubmissions) {
 // console.log(validateLearnerSubmissions(LearnerSubmissions))
 
 
-function penultimate (courseInfo, assignmentGroup, learnerSubmissions) {
-    
+function getLearnerData (courseInfo, assignmentGroup, learnerSubmissions) {
+    const checkCourseInfo = validateCourseInfo(CourseInfo)
+    const checkAssignmentGroup = validateAssignmentGroup(AssignmentGroup)
+    const checkAssignmentsInfo = validateAssignmentsInfo(AssignmentGroup)
+    const checkLearnerSubmissions = validateLearnerSubmissions(LearnerSubmissions)
+
+    /* const penultimateResult = {
+        id: null,                               // learner id
+        avg: null,                              // weighted avg
+        assignments: null                       // each assignment counting toward their overall grade
+    } */
+
+    try {
+        const splitDateArr = []
+        const today = ['2024', '10', '08']
+
+        for (const index of checkLearnerSubmissions.submission_date_arr) {
+            splitDateArr.push(index.split('-'))
+        }
+
+        /* for (const index of splitDateArr) {
+            if index[0]
+        } */
+
+        // console.log('2024' < '2023')
+        // console.log(checkLearnerSubmissions.submission_date_arr)
+        console.log(splitDateArr)
+    } catch (err) {
+
+    }
+
+    /* console.log(checkCourseInfo)
+    console.log(checkAssignmentGroup)
+    console.log(checkAssignmentsInfo)
+    console.log(checkLearnerSubmissions) */
 }
-
-
+console.log(getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions))
 
 
 
