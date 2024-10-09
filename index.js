@@ -1,30 +1,9 @@
-/* 
-cursory functions:
-
-function validateType for:
--- courseInfo                       // object
--- assignmentGroup                  // object -> one nested array
--- assignmentInfo                   // array of objects
--- learnerSubmission                // array of objects -> one nested object per index object of array
-
-function validateData for:
--- assignmentGroup  if aG course_id != cI id -> throw error "input was invalid"
-
--- assignmentInfo   if due_at is not yet due, ignore from grade calc;   if points_possible === 0 -> ignore from grade calc;
-
--- how and where do I calc the grade numbers?
-
-MAIN FUNCTION
-function getLearnerData () {}
-*/
-
-//                                              SAMPLE PARAMETER VALUES TO TEST CODE
-const CourseInfo = {
+const CourseInfo = {                        // CourseInfo -> object
     id: 451,
     name: "Introduction to JavaScript"
 }
 
-const AssignmentGroup = {
+const AssignmentGroup = {                   // AssignmentGroup -> object > array > objects
     id: 12345,
     name: "Fundamentals of JavaScript",
     course_id: 451,
@@ -51,7 +30,7 @@ const AssignmentGroup = {
     ]
 }
 
-const LearnerSubmissions = [
+const LearnerSubmissions = [                // LearnerSubmissions -> array > objects > object
     {
       learner_id: 125,
       assignment_id: 1,
@@ -94,108 +73,112 @@ const LearnerSubmissions = [
     }
 ]
 
-//                                                              MY CODE HERE
-// error logs & other global variables
-const typeValidationErrorLog = []
+//                                                      START CODE HERE
+function structureLSData (ls) {
+    const lsObjArr = []
+    const learner_ids = []
 
-//                                              Type Validation Functions Here
-//              validate Course Info
-function validateTypeCourseInfo (courseInfo) {
-    let typeCheck = false
+    for (const objEntry of ls) {
+        
+        const checkId = learner_ids.indexOf(objEntry.learner_id)
 
-    try {
-        if ((courseInfo.id) && (courseInfo.name)) {
-            typeCheck = true
-            return typeCheck
-        } else {
-            throw new ReferenceError("Invalid input: 'Course Info'")
-        }
-    } catch (err) {
-        typeValidationErrorLog.push(err)
-        return typeCheck
-    }
-}
-// console.log(validateTypeCourseInfo(CourseInfo))
-
-//              validate Assignment Group
-function validateTypeAssignmentGroup (assignmentGroup) {
-    const agExpectedKeys = ['id', 'name', 'course_id', 'group_weight', 'assignments']
-    let correctKeysCounter = 0
-    let typeCheck = false
-    
-    try {
-        const getObjectKeys = Object.keys(assignmentGroup)
-
-        for (let i = 0; i < getObjectKeys.length; i++) {
-            if (agExpectedKeys[i] == getObjectKeys[i]) {
-                correctKeysCounter += 1
+        const newLSObjEntry = {
+            learner_id: 0,
+            subm_details: {
+                asgmt_ids: [],
+                subm_ats: [],
+                scores: []
             }
         }
 
-        if (correctKeysCounter === 5) {
-            typeCheck = true
-            return typeCheck
-        } else {
-            throw new ReferenceError("Invalid input: 'Assignment Group'")
-        }
-    } catch (err) {
-        typeValidationErrorLog.push(err)
-        return typeCheck
-    }
-}
-// console.log(validateTypeAssignmentGroup(AssignmentGroup))
+        if (checkId === -1) {
 
-//              validate Assignment Info
-function validateTypeAssignmentsInfo (assignmentGroup) {
-    const aiExpectedKeys = ["id", "name", "due_at", "points_possible"]
-    let correctAssignmentsCounter = 0
-    let typeCheck = false
+            learner_ids.push(objEntry.learner_id)
+
+            newLSObjEntry.learner_id = objEntry.learner_id
+
+            newLSObjEntry.subm_details.asgmt_ids.push(objEntry.assignment_id)
+            newLSObjEntry.subm_details.subm_ats.push(objEntry.submission.submitted_at)
+            newLSObjEntry.subm_details.scores.push(objEntry.submission.score)
+
+            lsObjArr.push(newLSObjEntry)
+        } else {
+            lsObjArr[checkId].subm_details.asgmt_ids.push(objEntry.assignment_id)
+            lsObjArr[checkId].subm_details.subm_ats.push(objEntry.submission.submitted_at)
+            lsObjArr[checkId].subm_details.scores.push(objEntry.submission.score)
+        }
+    }
+    return lsObjArr
+}
+
+function structureAGData (ag) {
+
+    const agObjArrays = {
+        asgmt_ids: [],
+        due_ats: [],
+        points_possible_arr: []
+    }
     
-    try {
-        const getAssignments = assignmentGroup["assignments"]
-        for (let i = 0; i < getAssignments.length; i++) {
-            const getAssignmentObjKeys = Object.keys(getAssignments[i])
-            let correctKeysCounter = 0
-            
-            for (let j = 0; j < getAssignmentObjKeys.length; j++) {
-                if ((getAssignmentObjKeys[j]) == (aiExpectedKeys[j])) {
-                    correctKeysCounter += 1
-                }
+    for (const objEntry of ag.assignments) {
+        agObjArrays.asgmt_ids.push(objEntry.id)
+        agObjArrays.due_ats.push(objEntry.due_at)
+        agObjArrays.points_possible_arr.push(objEntry.points_possible)
+    }
+
+    return agObjArrays
+}
+
+function getLearnerData (ag, ls) {
+
+    const getAGData = structureAGData(ag)
+    const getLSData = structureLSData(ls)
+    const todaysDate = "2024-10-09"
+    const result = []
     
-                if (correctKeysCounter === 4) {
-                    correctAssignmentsCounter += 1
+    for (const objEntry of getLSData) {
+
+        const finalObj = {
+            id: 0,
+            avg: 0
+        }
+
+        let scoresTotal = 0
+        let pointsPossibleTotal = 0
+
+        for (let i = 0; i < objEntry.subm_details.asgmt_ids.length; i++) {
+
+            if (objEntry.subm_details.asgmt_ids[i] === getAGData.asgmt_ids[i]) {
+                
+                if (getAGData.due_ats[i] >= todaysDate) {
+                    continue
+                } else {
+
+                    if (objEntry.subm_details.subm_ats[i] > getAGData.due_ats[i]) {
+                        objEntry.subm_details.scores[i] -= (getAGData.points_possible_arr[i] * 0.1)
+                    }
+
+                    const calcAsgmt = ((objEntry.subm_details.scores[i] / getAGData.points_possible_arr[i]) * 100).toFixed(2)
+                    const j = i + 1
+
+                    scoresTotal += objEntry.subm_details.scores[i]
+                    pointsPossibleTotal += getAGData.points_possible_arr[i]
+
+                    finalObj[j] = calcAsgmt
+
                 }
+
+            } else {
+                continue
             }
         }
-        if (correctAssignmentsCounter === getAssignments.length) {
-            typeCheck = true
-            return typeCheck
-        } else {
-            throw new ReferenceError("Invalid input: 'Assignments Info'")
-        }
-    } catch (err) {
-        typeValidationErrorLog.push(err)
-        return typeCheck
+        const calcAvg = scoresTotal / pointsPossibleTotal
+
+        finalObj.id = objEntry.learner_id
+        finalObj.avg = calcAvg
+
+        result.push(finalObj)
     }
+
+    return result
 }
-// console.log(validateTypeAssignmentsInfo(AssignmentGroup))
-
-
-//              validate learnerSubmission
-function validateTypeLearnerSubmission (learnerSubmission) {
-
-}
-
-//              FINAL FUNCTION
-function getLearnerData (courseInfo, assignmentGroup, learnerSubmission) {
-    const tryCourseInfo = validateTypeCourseInfo(courseInfo)
-    const tryAssignmentGroup = validateTypeAssignmentGroup(assignmentGroup)
-    const tryAssignmentsInfo = validateTypeAssignmentsInfo(assignmentGroup)
-    const tryLearnerSubmissions = validateTypeLearnerSubmission(learnerSubmission)
-
-    let everythingChecksOut = false
-
-    if (tryCourseInfo && tryAssignmentGroup && tryAssignmentsInfo && tryLearnerSubmissions) {
-        everythingChecksOut = true
-    }
-}
+console.log(getLearnerData(AssignmentGroup, LearnerSubmissions))
