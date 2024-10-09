@@ -157,7 +157,7 @@ function getLearnerData (ag, ls) {
                         objEntry.subm_details.scores[i] -= (getAGData.points_possible_arr[i] * 0.1)
                     }
 
-                    const calcAsgmt = ((objEntry.subm_details.scores[i] / getAGData.points_possible_arr[i]) * 100).toFixed(2)
+                    const calcAsgmt = ((objEntry.subm_details.scores[i] / getAGData.points_possible_arr[i]) * 100).toFixed(1)
                     const j = i + 1
 
                     scoresTotal += objEntry.subm_details.scores[i]
@@ -171,7 +171,7 @@ function getLearnerData (ag, ls) {
                 continue
             }
         }
-        const calcAvg = scoresTotal / pointsPossibleTotal
+        const calcAvg = ((scoresTotal / pointsPossibleTotal) * 100).toFixed(1)
 
         finalObj.id = objEntry.learner_id
         finalObj.avg = calcAvg
