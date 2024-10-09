@@ -149,7 +149,7 @@ function getLearnerData (ag, ls) {
 
             if (objEntry.subm_details.asgmt_ids[i] === getAGData.asgmt_ids[i]) {
                 
-                if (getAGData.due_ats[i] >= todaysDate) {
+                if (getAGData.due_ats[i] > todaysDate) {
                     continue
                 } else {
 
