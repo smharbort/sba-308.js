@@ -76,24 +76,6 @@ const LearnerSubmissions = [                // LearnerSubmissions -> array > obj
 // console.log("2023-03-07" > "2023-01-24")
 
 //                                                      START CODE HERE
-//                                                      FORGET ABOUT TYPE VALIDATION RN
-
-/* const objStructure = {                               THIS IS 100% WHAT IM MISSING
-        learner_id: x,
-        submission_details: {
-            asgmt_id_arr: [],
-            submitted_at_arr: [],
-            score_arr: []
-        },
-        asgmt_details: {
-            asgmt_id_arr: [],
-            due_at_arr: [],
-            points_psbl_arr: []
-        }
-
-    } */
-
-
 function structureLSData (ls) {
     const lsObjArr = []
     const learner_ids = []
@@ -154,12 +136,59 @@ function getLearnerData (ag, ls) {
 
     const getAGData = structureAGData(ag)
     const getLSData = structureLSData(ls)
-
+    const todaysDate = "2024-10-09"
     const result = []
 
-    console.log(getAGData)
+    
+    for (const objEntry of getLSData) {
+
+        const finalObj = {
+            id: 0,
+            avg: 0,
+        }
+
+        console.log(objEntry.learner_id)
+        let scoresTotal = 0
+        let pointsPossibleTotal = 0
+
+        for (let i = 0; i < objEntry.subm_details.asgmt_ids.length; i++) {
+
+            if (objEntry.subm_details.asgmt_ids[i] === getAGData.asgmt_ids[i]) {
+                
+                if (getAGData.due_ats[i] >= todaysDate) {
+                    // console.log(`${getAGData.asgmt_ids[i]} is greater than today's date & will not be included!`)
+                    continue
+                } else {
+
+                    if (objEntry.subm_details.subm_ats[i] > getAGData.due_ats[i]) {
+                        objEntry.subm_details.scores[i] -= (getAGData.points_possible_arr[i] * 0.1)
+                        // console.log(objEntry.subm_details.scores[i])
+                    }
+
+                    scoresTotal += objEntry.subm_details.scores[i]
+                    pointsPossibleTotal += getAGData.points_possible_arr[i]
+                }
+
+            } else {
+                // console.log(`submission id does not match assignment id`)
+                continue
+            }
+        }
+        // console.log(scoresTotal)
+        // console.log(pointsPossibleTotal)
+        const calcAvg = scoresTotal / pointsPossibleTotal
+        // console.log(calcAvg)
+
+        finalObj.id = objEntry.learner_id
+        finalObj.avg = calcAvg
+
+        result.push(finalObj)
+    }
+
+    // console.log(getAGData)
     // console.log(getLSData)
+    // console.log(getLSData[1].subm_details.scores)
 
     return result
 }
-getLearnerData(AssignmentGroup, LearnerSubmissions)
+console.log(getLearnerData(AssignmentGroup, LearnerSubmissions))
