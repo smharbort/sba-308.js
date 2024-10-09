@@ -3,7 +3,7 @@ const CourseInfo = {                        // CourseInfo -> object
     name: "Introduction to JavaScript"
 }
 
-const AssignmentGroup = {                   // AssignmentGroup -> object > array > objects (assignments info)
+const AssignmentGroup = {                   // AssignmentGroup -> object > array > objects
     id: 12345,
     name: "Fundamentals of JavaScript",
     course_id: 451,
@@ -30,12 +30,12 @@ const AssignmentGroup = {                   // AssignmentGroup -> object > array
     ]
 }
 
-const LearnerSubmissions = [                // LearnerSubmissions -> array > objects > object (submissions info)
+const LearnerSubmissions = [                // LearnerSubmissions -> array > objects > object
     {
       learner_id: 125,
       assignment_id: 1,
       submission: {
-        submitted_at: "2023-01-25",         // convert date to number or something
+        submitted_at: "2023-01-25",
         score: 47
       }
     },
@@ -72,8 +72,6 @@ const LearnerSubmissions = [                // LearnerSubmissions -> array > obj
       }
     }
 ]
-
-// console.log("2023-03-07" > "2023-01-24")
 
 //                                                      START CODE HERE
 function structureLSData (ls) {
@@ -112,7 +110,6 @@ function structureLSData (ls) {
     }
     return lsObjArr
 }
-// console.log(structureLSData(LearnerSubmissions))
 
 function structureAGData (ag) {
 
@@ -130,7 +127,6 @@ function structureAGData (ag) {
 
     return agObjArrays
 }
-// console.log(structureAGData(AssignmentGroup))
 
 function getLearnerData (ag, ls) {
 
@@ -154,18 +150,15 @@ function getLearnerData (ag, ls) {
             if (objEntry.subm_details.asgmt_ids[i] === getAGData.asgmt_ids[i]) {
                 
                 if (getAGData.due_ats[i] >= todaysDate) {
-                    // console.log(`${getAGData.asgmt_ids[i]} is greater than today's date & will not be included!`)
                     continue
                 } else {
 
                     if (objEntry.subm_details.subm_ats[i] > getAGData.due_ats[i]) {
                         objEntry.subm_details.scores[i] -= (getAGData.points_possible_arr[i] * 0.1)
-                        // console.log(objEntry.subm_details.scores[i])
                     }
 
                     const calcAsgmt = ((objEntry.subm_details.scores[i] / getAGData.points_possible_arr[i]) * 100).toFixed(2)
                     const j = i + 1
-                    // const asgmtEntry = {j: (calcAsgmt * 100).toFixed(2)}
 
                     scoresTotal += objEntry.subm_details.scores[i]
                     pointsPossibleTotal += getAGData.points_possible_arr[i]
@@ -175,24 +168,16 @@ function getLearnerData (ag, ls) {
                 }
 
             } else {
-                // console.log(`submission id does not match assignment id`)
                 continue
             }
         }
-        // console.log(scoresTotal)
-        // console.log(pointsPossibleTotal)
         const calcAvg = scoresTotal / pointsPossibleTotal
-        // console.log(calcAvg)
 
         finalObj.id = objEntry.learner_id
         finalObj.avg = calcAvg
 
         result.push(finalObj)
     }
-
-    // console.log(getAGData)
-    // console.log(getLSData)
-    // console.log(getLSData[1].subm_details.scores)
 
     return result
 }
