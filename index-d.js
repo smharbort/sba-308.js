@@ -138,16 +138,14 @@ function getLearnerData (ag, ls) {
     const getLSData = structureLSData(ls)
     const todaysDate = "2024-10-09"
     const result = []
-
     
     for (const objEntry of getLSData) {
 
         const finalObj = {
             id: 0,
-            avg: 0,
+            avg: 0
         }
 
-        console.log(objEntry.learner_id)
         let scoresTotal = 0
         let pointsPossibleTotal = 0
 
@@ -165,8 +163,15 @@ function getLearnerData (ag, ls) {
                         // console.log(objEntry.subm_details.scores[i])
                     }
 
+                    const calcAsgmt = ((objEntry.subm_details.scores[i] / getAGData.points_possible_arr[i]) * 100).toFixed(2)
+                    const j = i + 1
+                    // const asgmtEntry = {j: (calcAsgmt * 100).toFixed(2)}
+
                     scoresTotal += objEntry.subm_details.scores[i]
                     pointsPossibleTotal += getAGData.points_possible_arr[i]
+
+                    finalObj[j] = calcAsgmt
+
                 }
 
             } else {
