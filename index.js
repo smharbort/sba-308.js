@@ -1,3 +1,4 @@
+//                                                      SAMPLE DATASET
 const CourseInfo = {                        // CourseInfo -> object
     id: 451,
     name: "Introduction to JavaScript"
@@ -73,67 +74,147 @@ const LearnerSubmissions = [                // LearnerSubmissions -> array > obj
     }
 ]
 
+
+
 //                                                      START CODE HERE
-function structureLSData (ls) {
-    const lsObjArr = []
-    const learner_ids = []
+function validateArguments(ci, ag, ls) {
 
-    for (const objEntry of ls) {
-        
-        const checkId = learner_ids.indexOf(objEntry.learner_id)
+  const validationErrorLog = []
+  
+  const validated = {
+    checkCI: false,
+    checkAG: false,
+    checkLS: false,
+    hasKeysCI: false,
+    hasKeysAG: false,
+    courseIdsMatch: false
+  }
 
-        const newLSObjEntry = {
-            learner_id: 0,
-            subm_details: {
-                asgmt_ids: [],
-                subm_ats: [],
-                scores: []
-            }
-        }
+  try {
+    if (typeof ci === "object") {
+      validated.checkCI = true
 
-        if (checkId === -1) {
-
-            learner_ids.push(objEntry.learner_id)
-
-            newLSObjEntry.learner_id = objEntry.learner_id
-
-            newLSObjEntry.subm_details.asgmt_ids.push(objEntry.assignment_id)
-            newLSObjEntry.subm_details.subm_ats.push(objEntry.submission.submitted_at)
-            newLSObjEntry.subm_details.scores.push(objEntry.submission.score)
-
-            lsObjArr.push(newLSObjEntry)
-        } else {
-            lsObjArr[checkId].subm_details.asgmt_ids.push(objEntry.assignment_id)
-            lsObjArr[checkId].subm_details.subm_ats.push(objEntry.submission.submitted_at)
-            lsObjArr[checkId].subm_details.scores.push(objEntry.submission.score)
-        }
+      if (ci.id) {
+        validated.hasKeysCI = true
+      } else {
+        throw new ReferenceError("Course Info Missing: 'id'")
+      }
+    } else {
+      throw new ReferenceError("Invalid Input: 'Course Info'")
     }
-    return lsObjArr
+  } catch (err) {
+    validationErrorLog.push(err)
+  }
+
+  try {
+    if (typeof ag === "object") {
+      validated.checkAG = true
+
+      if ((ag.assignments) && (ag.course_id)) {
+        validated.hasKeysAG = true
+      } else {
+        throw new ReferenceError("Assignment Group Missing Keys")
+      }
+    } else {
+      throw new ReferenceError("Invalid Input: 'Assignment Group'")
+    }
+  } catch (err) {
+    validationErrorLog.push(err)
+  }
+
+  try {
+    if (typeof ls === "object") {
+      validated.checkLS = true
+
+    } else {
+      throw new ReferenceError("Invalid Input: 'Learner Submissions'")
+    }
+
+    if (ci.id === ag.course_id) {
+      validated.courseIdsMatch = true
+    } else {
+      throw new ReferenceError("Invalid Input: Assignment Group does not match this course!")
+    }
+
+  } catch (err) {
+    validationErrorLog.push(err)
+  }
+
+  if (Object.values(validated) === true) {
+    return validated
+  } else {
+    return validated
+  }
 }
+console.log(validateArguments(CourseInfo, AssignmentGroup, LearnerSubmissions))
+
+function structureLSData (ls) {
+
+    const checkIdsMatch = validateArguments(CourseInfo, AssignmentGroup, LearnerSubmissions)
+
+    const lsResultArray = []
+    const learnerIDs = []
+
+    if (checkIdsMatch.courseIdsMatch === true) {
+
+      for (const objEntry of ls) {
+          
+          const checkId = learnerIDs.indexOf(objEntry.learner_id)
+
+          const lsResultObjEntry = {
+              learner_id: 0,
+              asgmt_ids: [],
+              subm_ats: [],
+              scores: []
+          }
+
+          if (checkId === -1) {
+
+              learnerIDs.push(objEntry.learner_id)
+
+              lsResultObjEntry.learner_id = objEntry.learner_id
+
+              lsResultObjEntry.asgmt_ids.push(objEntry.assignment_id)
+              lsResultObjEntry.subm_ats.push(objEntry.submission.submitted_at)
+              lsResultObjEntry.scores.push(objEntry.submission.score)
+
+              lsResultArray.push(lsResultObjEntry)
+          } else {
+              lsResultArray[checkId].asgmt_ids.push(objEntry.assignment_id)
+              lsResultArray[checkId].subm_ats.push(objEntry.submission.submitted_at)
+              lsResultArray[checkId].scores.push(objEntry.submission.score)
+          }
+      }
+    }
+
+    return lsResultArray
+}
+// console.log(structureLSData(LearnerSubmissions))
 
 function structureAGData (ag) {
 
-    const agObjArrays = {
+    const agResultObject = {
         asgmt_ids: [],
         due_ats: [],
         points_possible_arr: []
     }
-    
+  
     for (const objEntry of ag.assignments) {
-        agObjArrays.asgmt_ids.push(objEntry.id)
-        agObjArrays.due_ats.push(objEntry.due_at)
-        agObjArrays.points_possible_arr.push(objEntry.points_possible)
+        agResultObject.asgmt_ids.push(objEntry.id)
+        agResultObject.due_ats.push(objEntry.due_at)
+        agResultObject.points_possible_arr.push(objEntry.points_possible)
     }
 
-    return agObjArrays
+    return agResultObject
 }
+// console.log(structureAGData(AssignmentGroup))
 
 function getLearnerData (ag, ls) {
 
     const getAGData = structureAGData(ag)
     const getLSData = structureLSData(ls)
-    const todaysDate = "2024-10-09"
-    const result = []
+    const todaysDate = "2024-10-09"                 // hard-coded today's date -> it works for the purposes of date evaluations in this assignment but Manara
+    const result = []                               // clued me in to why I should definitely convert to number AND THEN evaluate, going forward
     
     for (const objEntry of getLSData) {
 
@@ -145,40 +226,39 @@ function getLearnerData (ag, ls) {
         let scoresTotal = 0
         let pointsPossibleTotal = 0
 
-        for (let i = 0; i < objEntry.subm_details.asgmt_ids.length; i++) {
+        for (let i = 0; i < objEntry.asgmt_ids.length; i++) {       // LS arrays in ObjEntry all have the same number of entries, and, for each, array[index]
+                                                                    // refers to info about the same submission entry, therefore, I can use the same [i] to interact
+                                                                    // with each array to perform operations that would otherwise be tedious to reference individually
+                                                                    // --> probably would need to restructure code below if working with more complex data sets
 
-            if (objEntry.subm_details.asgmt_ids[i] === getAGData.asgmt_ids[i]) {
+            if (objEntry.asgmt_ids[i] === getAGData.asgmt_ids[i]) {             // match AG assignment id to LS assignment id
                 
-                if (getAGData.due_ats[i] > todaysDate) {
+                if (getAGData.due_ats[i] > todaysDate) {                        // ignore assignments due beyond today's date
                     continue
                 } else {
+                    if (objEntry.subm_ats[i] > getAGData.due_ats[i]) {                      // if LS assignment submission date is beyond assignment due date,
+                        objEntry.scores[i] -= (getAGData.points_possible_arr[i] * 0.1)      // calculate and deduct late penalty from score
+                    }                                                                                               
 
-                    if (objEntry.subm_details.subm_ats[i] > getAGData.due_ats[i]) {
-                        objEntry.subm_details.scores[i] -= (getAGData.points_possible_arr[i] * 0.1)
-                    }
+                    const calcAsgmt = ((objEntry.scores[i] / getAGData.points_possible_arr[i]) * 100).toFixed(1)    // find assignment grade percentage
 
-                    const calcAsgmt = ((objEntry.subm_details.scores[i] / getAGData.points_possible_arr[i]) * 100).toFixed(1)
-                    const j = i + 1
-
-                    scoresTotal += objEntry.subm_details.scores[i]
+                    scoresTotal += objEntry.scores[i]
                     pointsPossibleTotal += getAGData.points_possible_arr[i]
 
-                    finalObj[j] = calcAsgmt
-
+                    finalObj[i + 1] = calcAsgmt
                 }
 
             } else {
                 continue
             }
         }
-        const calcAvg = ((scoresTotal / pointsPossibleTotal) * 100).toFixed(1)
+        const calcAvg = ((scoresTotal / pointsPossibleTotal) * 100).toFixed(1)  // overall grade percentage
 
         finalObj.id = objEntry.learner_id
         finalObj.avg = calcAvg
 
         result.push(finalObj)
     }
-
     return result
 }
 console.log(getLearnerData(AssignmentGroup, LearnerSubmissions))
