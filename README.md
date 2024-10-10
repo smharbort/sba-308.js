@@ -1,9 +1,5 @@
 ## Manara and/or Tishana:
-### I have put SO much time & effort into this project over the last 2 days-- I hope you will recognize that by appreciating that the program generally works as intended. It is missing a couple things as per the SBA requirements, which I will leave comments about below, but I am confident about how to implement those missing requirements-- as in, I believe I would have been able to satisfy and go beyond requirements if it were not for, a. unfortunately, poor task prioritization initially, and b. a need for more repetitions with these concepts before I am familiar to the extent that I can more easily plan & execute according to specifications, within time constraints.
-
-
-## missing requirements I know about:
-2. missing getLearnerData parameter to pass CourseInfo object -> I no longer need to pass CourseInfo into the getLearnerData function because I check that CourseInfo.id matches AssignmentGroup.course_id earlier in a supporting validation function, but, I understand that I could refactor the code to do that explicitly in the getLearnerData() function.
+### I have put SO much time & effort into this project over the last 2 days-- I hope you will recognize that by appreciating that the program generally works as intended. I AM NO LONGER MISSING REQUIREMENTS
 
 ## generally, this is how the program works:
 1. structureLSData function -> takes LearnerSubmissions as its argument and restructures the relevant keys & values in a way that I thought would be more palatable to
