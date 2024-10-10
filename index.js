@@ -1,6 +1,8 @@
 //                                                      SAMPLE DATASET
 const CourseInfo = {                        // CourseInfo -> object
-    id: 451,
+    id: 451,                                // rename this key to see validation function 'return error log' in action
+                                            // --> also returns different error messages for: CI, AG, LS typeof !=== "object",
+                                            // AG.course_id or AG.assignments keys missing 
     name: "Introduction to JavaScript"
 }
 
@@ -140,7 +142,7 @@ function validateArguments(ci, ag, ls) {
     validationErrorLog.push(err)
   }
 
-  if (Object.values(validated) === true) {
+  if (((validated.checkCI) && (validated.checkAG) && (validated.checkLS) && (validated.hasKeysCI) && (validated.hasKeysAG) && (validated.courseIdsMatch)) === true) {
     return validated
   } else {
     return validationErrorLog
