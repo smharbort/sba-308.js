@@ -143,7 +143,7 @@ function validateArguments(ci, ag, ls) {
   if (Object.values(validated) === true) {
     return validated
   } else {
-    return validated
+    return validationErrorLog
   }
 }
 console.log(validateArguments(CourseInfo, AssignmentGroup, LearnerSubmissions))
