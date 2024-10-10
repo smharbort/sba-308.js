@@ -3,13 +3,7 @@
 
 
 ## missing requirements I know about:
-1. try/catch statements -> I worked with these a lot in my first attempts at the project, and feel generally comfortable implementing them now, but doing so actually
-soaked up too much of my time as I played around with supporting functions for [type & expected keys validations of objects that would be passed as arguments to
-the getLearnerData function]
-2. missing getLearnerData parameter to pass CourseInfo object -> met this requirement in a past project iteration. I will go back and add these missing components
-another day soon following submission, but, I don't want my current product to break by factoring in [(pseudo-code) if CourseInfo.id === AssignmentGroup.course_id, then ...]
-into my series of if statements in the getLearnerData function.
-3. I could not quickly figure out how to move the assignment entries {number: assignment_grade_percentage} AFTER the {id: x, avg: y} entries, so unfortunately the formatting of the final result is slightly off
+2. missing getLearnerData parameter to pass CourseInfo object -> I no longer need to pass CourseInfo into the getLearnerData function because I check that CourseInfo.id matches AssignmentGroup.course_id earlier in a supporting validation function, but, I understand that I could refactor the code to do that explicitly in the getLearnerData() function.
 
 ## generally, this is how the program works:
 1. structureLSData function -> takes LearnerSubmissions as its argument and restructures the relevant keys & values in a way that I thought would be more palatable to
