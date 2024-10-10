@@ -137,7 +137,6 @@ function validateArguments(ci, ag, ls) {
     } else {
       throw new ReferenceError("Invalid Input: Assignment Group does not match this course!")
     }
-
   } catch (err) {
     validationErrorLog.push(err)
   }
@@ -152,68 +151,66 @@ console.log(validateArguments(CourseInfo, AssignmentGroup, LearnerSubmissions))
 
 function structureLSData (ls) {
 
-    const checkIdsMatch = validateArguments(CourseInfo, AssignmentGroup, LearnerSubmissions)
+  const lsResultArray = []
+  const learnerIDs = []
 
-    const lsResultArray = []
-    const learnerIDs = []
+  for (const objEntry of ls) {
+      
+    const checkId = learnerIDs.indexOf(objEntry.learner_id)
 
-    if (checkIdsMatch.courseIdsMatch === true) {
-
-      for (const objEntry of ls) {
-          
-          const checkId = learnerIDs.indexOf(objEntry.learner_id)
-
-          const lsResultObjEntry = {
-              learner_id: 0,
-              asgmt_ids: [],
-              subm_ats: [],
-              scores: []
-          }
-
-          if (checkId === -1) {
-
-              learnerIDs.push(objEntry.learner_id)
-
-              lsResultObjEntry.learner_id = objEntry.learner_id
-
-              lsResultObjEntry.asgmt_ids.push(objEntry.assignment_id)
-              lsResultObjEntry.subm_ats.push(objEntry.submission.submitted_at)
-              lsResultObjEntry.scores.push(objEntry.submission.score)
-
-              lsResultArray.push(lsResultObjEntry)
-          } else {
-              lsResultArray[checkId].asgmt_ids.push(objEntry.assignment_id)
-              lsResultArray[checkId].subm_ats.push(objEntry.submission.submitted_at)
-              lsResultArray[checkId].scores.push(objEntry.submission.score)
-          }
-      }
+    const lsResultObjEntry = {
+        learner_id: 0,
+        asgmt_ids: [],
+        subm_ats: [],
+        scores: []
     }
 
-    return lsResultArray
+    if (checkId === -1) {
+
+        learnerIDs.push(objEntry.learner_id)
+
+        lsResultObjEntry.learner_id = objEntry.learner_id
+
+        lsResultObjEntry.asgmt_ids.push(objEntry.assignment_id)
+        lsResultObjEntry.subm_ats.push(objEntry.submission.submitted_at)
+        lsResultObjEntry.scores.push(objEntry.submission.score)
+
+        lsResultArray.push(lsResultObjEntry)
+    } else {
+        lsResultArray[checkId].asgmt_ids.push(objEntry.assignment_id)
+        lsResultArray[checkId].subm_ats.push(objEntry.submission.submitted_at)
+        lsResultArray[checkId].scores.push(objEntry.submission.score)
+    }
+  }
+  return lsResultArray
 }
 // console.log(structureLSData(LearnerSubmissions))
 
-function structureAGData (ag) {
+function structureAGData (ci, ag, ls) {             // going to refactor my validation function because it was NOT my intention to have to feed all input groups as params to the structureAGData function
 
-    const agResultObject = {
-        asgmt_ids: [],
-        due_ats: [],
-        points_possible_arr: []
-    }
-  
+  const checkIdsMatch = validateArguments(ci, ag, ls)
+
+  const agResultObject = {
+      asgmt_ids: [],
+      due_ats: [],
+      points_possible_arr: []
+  }
+
+  if (checkIdsMatch.courseIdsMatch === true) {
+
     for (const objEntry of ag.assignments) {
         agResultObject.asgmt_ids.push(objEntry.id)
         agResultObject.due_ats.push(objEntry.due_at)
         agResultObject.points_possible_arr.push(objEntry.points_possible)
     }
-
-    return agResultObject
+  }
+  return agResultObject
 }
-// console.log(structureAGData(AssignmentGroup))
+// console.log(structureAGData(CourseInfo, AssignmentGroup, LearnerSubmissions))
 
-function getLearnerData (ag, ls) {
+function getLearnerData (ci, ag, ls) {
 
-    const getAGData = structureAGData(ag)
+    const getAGData = structureAGData(ci, ag, ls)
     const getLSData = structureLSData(ls)
     const todaysDate = "2024-10-09"                 // hard-coded today's date -> it works for the purposes of date evaluations in this assignment but Manara
     const result = []                               // clued me in to why I should definitely convert to number AND THEN evaluate, going forward
@@ -263,4 +260,4 @@ function getLearnerData (ag, ls) {
     }
     return result
 }
-console.log(getLearnerData(AssignmentGroup, LearnerSubmissions))
+console.log(getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions))
